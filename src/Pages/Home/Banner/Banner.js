@@ -1,5 +1,6 @@
 import React from "react";
 import chair from "../../../assets/images/chair.png";
+import PrimaryButton from "../../../Components/PrimaryButton/PrimaryButton";
 
 const Banner = () => {
   return (
@@ -11,9 +12,7 @@ const Banner = () => {
           <p className="py-6">
             Lorem Ipsum is simply dummy text of the printing and typesetting
           </p>
-          <button className="btn btn-primary w-auto text-white bg-gradient-to-r from-primary to-secondary">
-            Get Started
-          </button>
+          <PrimaryButton>Get Started</PrimaryButton>
         </div>
       </div>
     </div>
