@@ -3,10 +3,12 @@ import chair from "../../assets/images/chair.png";
 import { format } from "date-fns";
 import { DayPicker } from "react-day-picker";
 import AppointmentItems from "./AppointmentItems";
+import BookingModal from "./BookingModal/BookingModal";
 
 const Appointment = () => {
   const [selected, setSelected] = useState(new Date());
   const [appointmentOptions, setAppointmentOptions] = useState([]);
+  const [treatment, setTreatment] = useState(null);
 
   useEffect(() => {
     fetch("appointmentOptions.json")
@@ -43,9 +45,17 @@ const Appointment = () => {
             <AppointmentItems
               key={option._id}
               option={option}
+              setTreatment={setTreatment}
             ></AppointmentItems>
           ))}
         </div>
+        {treatment && (
+          <BookingModal
+            selected={selected}
+            treatment={treatment}
+            setTreatment={setTreatment}
+          ></BookingModal>
+        )}
       </section>
     </div>
   );
