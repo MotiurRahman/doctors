@@ -78,7 +78,7 @@ const BookingModal = ({ treatment, selected, setTreatment }) => {
               className="input input-bordered w-full my-2"
             />
             <button type="submit" className="btn btn-accent w-full">
-              Submit
+              Submits
             </button>
           </form>
         </div>
