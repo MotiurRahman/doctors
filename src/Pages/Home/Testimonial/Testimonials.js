@@ -39,7 +39,7 @@ const Testimonials = () => {
             <img className="h-20" src={quote} alt="" />
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px">
           {persons.map((people) => (
             <Testimonial key={people.id} people={people}></Testimonial>
           ))}
