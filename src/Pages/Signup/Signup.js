@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { AuthUserContext } from "../../AuthContext/AuthContext";
 
 const Signup = () => {
+  const { createAccount, updateUser, googleLogin } =
+    useContext(AuthUserContext);
+  const [message, setMessage] = useState("");
   const {
     register,
     handleSubmit,
@@ -11,6 +15,45 @@ const Signup = () => {
 
   const handleSignUp = (data) => {
     console.log(data);
+    setMessage("");
+    const displayName = data.displayName;
+    const photoURL = "";
+
+    createAccount(data.email, data.password)
+      .then((res) => {
+        console.log(res.user);
+        const profile = { displayName, photoURL };
+        console.log(profile);
+        updateUser(profile)
+          .then(() => {
+            setMessage("Profile Updated Successfully");
+          })
+          .catch((error) => {
+            const errorMessage = error.message;
+            setMessage(errorMessage);
+          });
+      })
+      .catch((error) => {
+        console.log(error.message);
+        const errorMessage = error.message;
+        setMessage(errorMessage);
+      });
+  };
+
+  const handleGoogleLogin = () => {
+    googleLogin()
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+        setMessage("You have loggedin with google");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        setMessage(errorMessage);
+      });
   };
   return (
     <div className="lg:w-1/2 m-auto ">
@@ -24,17 +67,17 @@ const Signup = () => {
             <span className="label-text">Name</span>
           </label>
           <input
-            {...register("name", {
+            {...register("displayName", {
               required: "Name field is required",
             })}
             type="text"
-            name="name"
+            name="displayName"
             placeholder="enter name"
             className="input input-bordered w-full max-w-xs"
           />
-          {errors.name && (
+          {errors.displayName && (
             <span className="text-red-600 text-left">
-              {errors.name.message}
+              {errors.displayName.message}
             </span>
           )}
         </div>
@@ -86,10 +129,15 @@ const Signup = () => {
               {errors.password.message}
             </span>
           )}
+          <p className="text-green text-center">{message}</p>
         </div>
 
         {/* <p>{data}</p> */}
-        <input type="submit" className="btn btn-wide my-2" value="Submit" />
+        <input
+          type="submit"
+          className="btn btn-wide my-2"
+          value="Create an Account"
+        />
         <p>
           Already have an account?{" "}
           <Link className="text-primary" to="/login">
@@ -98,7 +146,9 @@ const Signup = () => {
         </p>
       </form>
       <div className="divider">OR</div>
-      <button className="btn btn-outline btn-wide">Continue with Google</button>
+      <button onClick={handleGoogleLogin} className="btn btn-outline btn-wide">
+        Continue with Google
+      </button>
     </div>
   );
 };

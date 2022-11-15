@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { AuthUserContext } from "../../AuthContext/AuthContext";
 
 const Login = () => {
+  const { login, googleLogin } = useContext(AuthUserContext);
+  const [msg, setMessage] = useState("");
   const {
     register,
     handleSubmit,
@@ -11,8 +14,34 @@ const Login = () => {
   const [data, setData] = useState("");
 
   const handleLogin = (data) => {
-    console.log(data);
+    console.log(data.email, data.password);
+    login(data.email, data.password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(user);
+        setMessage("You have loggedin");
+      })
+      .catch((error) => {
+        setMessage(error.message);
+      });
   };
+
+  const handleGoogleLogin = () => {
+    googleLogin()
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+        setMessage("You have loggedin with google");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        setMessage(errorMessage);
+      });
+  };
+
   return (
     <div className="lg:w-1/2 m-auto ">
       <form
@@ -67,6 +96,7 @@ const Login = () => {
               <span className="label-text-alt">Forgot Password?</span>
             </Link>
           </label>
+          <p>{msg}</p>
         </div>
 
         {/* <p>{data}</p> */}
@@ -79,7 +109,9 @@ const Login = () => {
         </p>
       </form>
       <div className="divider">OR</div>
-      <button className="btn btn-outline btn-wide">Continue with Google</button>
+      <button onClick={handleGoogleLogin} className="btn btn-outline btn-wide">
+        Continue with Google
+      </button>
     </div>
   );
 };
