@@ -1,30 +1,54 @@
 import { format } from "date-fns";
-import React from "react";
+import React, { useContext } from "react";
+import toast from "react-hot-toast";
+import { AuthUserContext } from "../../../AuthContext/AuthContext";
 
-const BookingModal = ({ treatment, selected, setTreatment }) => {
-  const { _id, name, slots } = treatment;
-  const dateVal = format(selected, "PP");
-  const handleBookingSubmit = (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const pName = form.name.value;
+const BookingModal = ({ treatment, setTreatment, selectedDate, refetch }) => {
+  // treatment is just another name of appointmentOptions with name, slots, _id
+  const { name: treatmentName, slots } = treatment;
+  const date = format(selectedDate, "PP");
+  const { user } = useContext(AuthUserContext);
+
+  const handleBooking = (event) => {
+    event.preventDefault();
+    const form = event.target;
     const slot = form.slot.value;
+    const name = form.name.value;
     const email = form.email.value;
     const phone = form.phone.value;
-
+    // [3, 4, 5].map((value, i) => console.log(value))
     const booking = {
-      appointmentdate: dateVal,
-      treatment: name,
-      patient: pName,
+      appointmentDate: date,
+      treatment: treatmentName,
+      patient: name,
       slot,
       email,
       phone,
     };
-    console.log(booking);
 
-    // Once data is saved then close the modal
-    setTreatment(null);
+    // TODO: send data to the server
+    // and once data is saved then close the modal
+    // and display success toast
+    fetch("http://localhost:8000/bookings", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(booking),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.acknowledged) {
+          setTreatment(null);
+          toast.success("Booking confirmed");
+          refetch();
+        } else {
+          toast.error(data.message);
+        }
+      });
   };
+
   return (
     <>
       <input type="checkbox" id="booking-modal" className="modal-toggle" />
@@ -36,50 +60,52 @@ const BookingModal = ({ treatment, selected, setTreatment }) => {
           >
             ✕
           </label>
-          <h3 className="text-lg font-bold text-left">{name}</h3>
-          <form onSubmit={handleBookingSubmit}>
+          <h3 className="text-lg font-bold">{treatmentName}</h3>
+          <form
+            onSubmit={handleBooking}
+            className="grid grid-cols-1 gap-3 mt-10"
+          >
             <input
               type="text"
               disabled
-              value={dateVal}
-              placeholder="Type here"
-              className="input input-bordered w-full my-2"
+              value={date}
+              className="input w-full input-bordered "
             />
-            <select
-              name="slot"
-              className="select select-bordered w-full my-2"
-              required
-            >
-              {slots.map((slot, index) => (
-                <option key={index} value={slot}>
+            <select name="slot" className="select select-bordered w-full">
+              {slots.map((slot, i) => (
+                <option value={slot} key={i}>
                   {slot}
                 </option>
               ))}
             </select>
             <input
-              type="text"
               name="name"
-              placeholder="Full Name"
-              required
-              className="input input-bordered w-full my-2"
+              type="text"
+              defaultValue={user?.displayName}
+              disabled
+              placeholder="Your Name"
+              className="input w-full input-bordered"
             />
             <input
-              type="number"
-              name="phone"
-              required
-              placeholder="Enter Number"
-              className="input input-bordered w-full my-2"
-            />
-            <input
-              type="email"
               name="email"
-              required
-              placeholder="Email"
-              className="input input-bordered w-full my-2"
+              type="email"
+              defaultValue={user?.email}
+              disabled
+              placeholder="Email Address"
+              className="input w-full input-bordered"
             />
-            <button type="submit" className="btn btn-accent w-full">
-              Submits
-            </button>
+            <input
+              name="phone"
+              type="text"
+              placeholder="Phone Number"
+              className="input w-full input-bordered"
+            />
+            <br />
+            <input
+              className="btn btn-accent w-full"
+              type="submit"
+              value="Submit"
+            />
           </form>
         </div>
       </div>
