@@ -8,6 +8,7 @@ import {
   signInWithCredential,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signOut,
   updateProfile,
 } from "firebase/auth";
 
@@ -39,6 +40,10 @@ const AuthContext = ({ children }) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
+  const logout = () => {
+    return signOut(auth);
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setLoader(false);
@@ -47,7 +52,15 @@ const AuthContext = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  const authValue = { user, createAccount, updateUser, login, googleLogin };
+  const authValue = {
+    user,
+    loader,
+    createAccount,
+    updateUser,
+    login,
+    logout,
+    googleLogin,
+  };
   return (
     <AuthUserContext.Provider value={authValue}>
       {children}

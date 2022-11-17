@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthUserContext } from "../../AuthContext/AuthContext";
 
 const Signup = () => {
@@ -12,6 +13,10 @@ const Signup = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  let navigate = useNavigate();
+  let location = useLocation();
+  let from = location.state?.from?.pathname || "/";
 
   const handleSignUp = (data) => {
     console.log(data);
@@ -26,7 +31,8 @@ const Signup = () => {
         console.log(profile);
         updateUser(profile)
           .then(() => {
-            setMessage("Profile Updated Successfully");
+            toast("Uaer Created Successfully");
+            navigate("/login");
           })
           .catch((error) => {
             const errorMessage = error.message;
@@ -45,7 +51,8 @@ const Signup = () => {
       .then((result) => {
         const user = result.user;
         console.log(user);
-        setMessage("You have loggedin with google");
+        toast("You have loggedin with google");
+        navigate(from, { replace: true });
       })
       .catch((error) => {
         const errorCode = error.code;

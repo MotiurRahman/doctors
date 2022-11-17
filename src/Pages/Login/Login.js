@@ -1,11 +1,14 @@
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthUserContext } from "../../AuthContext/AuthContext";
 
 const Login = () => {
   const { login, googleLogin } = useContext(AuthUserContext);
   const [msg, setMessage] = useState("");
+  let navigate = useNavigate();
+  let location = useLocation();
+  let from = location.state?.from?.pathname || "/";
   const {
     register,
     handleSubmit,
@@ -20,6 +23,7 @@ const Login = () => {
         const user = userCredential.user;
         console.log(user);
         setMessage("You have loggedin");
+        navigate(from, { replace: true });
       })
       .catch((error) => {
         setMessage(error.message);
@@ -32,6 +36,7 @@ const Login = () => {
         const user = result.user;
         console.log(user);
         setMessage("You have loggedin with google");
+        navigate(from, { replace: true });
       })
       .catch((error) => {
         const errorCode = error.code;

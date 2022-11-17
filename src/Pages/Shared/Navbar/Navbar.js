@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthUserContext } from "../../../AuthContext/AuthContext";
 
 const Navbar = () => {
+  const { user, logout } = useContext(AuthUserContext);
+
+  const handleLogin = () => {
+    logout()
+      .then(() => {})
+      .catch((error) => console.log(error));
+  };
   const menuItem = (
     <>
       <li>
@@ -10,7 +18,23 @@ const Navbar = () => {
         <Link to="appointment">Appointment</Link>
         <Link to="reviews">Reviews</Link>
         <Link to="contact-us">Contact Us</Link>
-        <Link to="login">Login</Link>
+        {user?.uid ? (
+          <>
+            <Link onClick={handleLogin}>Logout</Link>
+            <Link>Hi, {user.displayName}</Link>
+            {user?.photoURL && (
+              <Link>
+                <div className="avatar">
+                  <div className="w-8 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                    <img src={user?.photoURL} alt="" />
+                  </div>
+                </div>
+              </Link>
+            )}
+          </>
+        ) : (
+          <Link to="login">Login</Link>
+        )}
       </li>
     </>
   );
