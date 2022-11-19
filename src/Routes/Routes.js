@@ -12,6 +12,7 @@ import PrivateRoute from "../PrivateRoute/PrivateRoute";
 import DashboardLayout from "../Layout/DashboardLayout/DashboardLayout";
 import MyAppointment from "../Components/MyAppointment/MyAppointment";
 import AllUsers from "../Dashboard/AllUsers/AllUsers";
+import AdminRoutes from "./AdminRoutes/AdminRoutes";
 
 const routes = createBrowserRouter([
   {
@@ -35,10 +36,7 @@ const routes = createBrowserRouter([
           </PrivateRoute>
         ),
       },
-      {
-        path: "/reviews",
-        element: <Reviews></Reviews>,
-      },
+
       {
         path: "/contact-us",
         element: <ContactUs></ContactUs>,
@@ -67,7 +65,11 @@ const routes = createBrowserRouter([
       },
       {
         path: "/dashboard/allusers",
-        element: <AllUsers></AllUsers>,
+        element: (
+          <AdminRoutes>
+            <AllUsers></AllUsers>,
+          </AdminRoutes>
+        ),
       },
     ],
   },

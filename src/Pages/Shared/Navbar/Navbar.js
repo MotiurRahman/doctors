@@ -15,9 +15,9 @@ const Navbar = () => {
       <li>
         <Link to="/">Home</Link>
         <Link to="/about">About</Link>
-        <Link to="appointment">Appointment</Link>
-        <Link to="reviews">Reviews</Link>
-        <Link to="contact-us">Contact Us</Link>
+        <Link to="/appointment">Appointment</Link>
+        <Link to="/dashboard">dashboard</Link>
+        <Link to="/contact-us">Contact Us</Link>
         {user?.uid ? (
           <>
             <Link onClick={handleLogin}>Logout</Link>
