@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthUserContext } from "../../AuthContext/AuthContext";
+import useToken from "../../hooks/useToken";
 
 const Signup = () => {
   const { createAccount, updateUser, googleLogin } =
@@ -14,9 +15,15 @@ const Signup = () => {
     formState: { errors },
   } = useForm();
 
+  const [createdUserEmail, setCreatedUserEmail] = useState("");
+  const [token] = useToken(createdUserEmail);
   let navigate = useNavigate();
   let location = useLocation();
   let from = location.state?.from?.pathname || "/";
+
+  if (token) {
+    navigate("/login");
+  }
 
   const handleSignUp = (data) => {
     console.log(data);
@@ -31,8 +38,7 @@ const Signup = () => {
         console.log(profile);
         updateUser(profile)
           .then(() => {
-            toast("Uaer Created Successfully");
-            navigate("/login");
+            saveUser(data.displayName, data.email);
           })
           .catch((error) => {
             const errorMessage = error.message;
@@ -43,6 +49,24 @@ const Signup = () => {
         console.log(error.message);
         const errorMessage = error.message;
         setMessage(errorMessage);
+      });
+  };
+
+  const saveUser = (name, email) => {
+    const user = { name, email };
+    fetch("http://localhost:8000/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        toast("Uaer Created Successfully");
+        setCreatedUserEmail(email);
+        //  navigate("/login");
       });
   };
 

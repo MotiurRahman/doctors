@@ -2,10 +2,13 @@ import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthUserContext } from "../../AuthContext/AuthContext";
+import useToken from "../../hooks/useToken";
 
 const Login = () => {
   const { login, googleLogin } = useContext(AuthUserContext);
   const [msg, setMessage] = useState("");
+  const [loginUserEmail, setLoginUserEMail] = useState("");
+  const [token] = useToken(loginUserEmail);
   let navigate = useNavigate();
   let location = useLocation();
   let from = location.state?.from?.pathname || "/";
@@ -16,6 +19,10 @@ const Login = () => {
   } = useForm();
   const [data, setData] = useState("");
 
+  if (token) {
+    navigate(from, { replace: true });
+  }
+
   const handleLogin = (data) => {
     console.log(data.email, data.password);
     login(data.email, data.password)
@@ -23,7 +30,7 @@ const Login = () => {
         const user = userCredential.user;
         console.log(user);
         setMessage("You have loggedin");
-        navigate(from, { replace: true });
+        setLoginUserEMail(data.email);
       })
       .catch((error) => {
         setMessage(error.message);
