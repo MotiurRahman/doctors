@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 import { AuthUserContext } from "../../AuthContext/AuthContext";
 
 const MyAppointment = () => {
-  const { user } = useContext(AuthUserContext);
+  const { user, logout } = useContext(AuthUserContext);
   const url = `http://localhost:8000/bookings?email=${user.email}`;
   // console.log("Token", localStorage.getItem("accessToken"));
   const { data: bookings = [] } = useQuery({
@@ -16,6 +16,10 @@ const MyAppointment = () => {
         },
       });
       const data = await res.json();
+      if (data.status === 401) {
+        logout();
+        return;
+      }
       return data;
     },
   });
@@ -35,7 +39,7 @@ const MyAppointment = () => {
             </tr>
           </thead>
           <tbody>
-            {bookings.map((book, index) => (
+            {bookings?.map((book, index) => (
               <tr key={book._id}>
                 <th>{index + 1}</th>
                 <td>{book.patient}</td>

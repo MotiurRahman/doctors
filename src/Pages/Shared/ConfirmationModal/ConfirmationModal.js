@@ -22,7 +22,7 @@ const ConfirmationModal = ({
               htmlFor="confirmationModal"
               className="btn"
             >
-              Yay!
+              Delete!
             </label>
             <button onClick={closeModal} className="btn">
               Cancle
