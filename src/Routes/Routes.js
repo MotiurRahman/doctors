@@ -94,7 +94,9 @@ const routes = createBrowserRouter([
       {
         path: "/dashboard/payment/:id",
         loader: ({ params }) => {
-          return fetch(`http://localhost:8000/bookings/${params.id}`);
+          return fetch(
+            `https://doctors-server-motiurrahman.vercel.app/bookings/${params.id}`
+          );
         },
         element: (
           <AdminRoutes>

@@ -1,8 +1,8 @@
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import React from "react";
-import { useNavigation } from "react-day-picker";
-import { useLoaderData } from "react-router-dom";
+
+import { useLoaderData, useNavigation } from "react-router-dom";
 import Loading from "../../Components/Loading/Loading";
 import CheckoutForm from "../CheckoutForm/CheckoutForm";
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPT_PK);

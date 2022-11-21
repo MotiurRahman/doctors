@@ -25,14 +25,17 @@ const CheckoutForm = ({ bookings }) => {
 
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
-    fetch("http://localhost:8000/create-payment-intent", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `bearer ${localStorage.getItem("accessToken")}`,
-      },
-      body: JSON.stringify({ price }),
-    })
+    fetch(
+      "https://doctors-server-motiurrahman.vercel.app/create-payment-intent",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `bearer ${localStorage.getItem("accessToken")}`,
+        },
+        body: JSON.stringify({ price }),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         console.log("data:", data);
@@ -58,7 +61,7 @@ const CheckoutForm = ({ bookings }) => {
 
     if (error) {
       console.log("[error]", error);
-      setCardError(error);
+      setCardError(error.message);
     } else {
       setCardError("");
       console.log("[PaymentMethod]", paymentMethod);
@@ -94,7 +97,7 @@ const CheckoutForm = ({ bookings }) => {
         email,
         bookingId: _id,
       };
-      fetch("http://localhost:8000/payments", {
+      fetch("https://doctors-server-motiurrahman.vercel.app/payments", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -140,17 +143,16 @@ const CheckoutForm = ({ bookings }) => {
         </button>
       </form>
       <p>{cardError}</p>
-      <p>
-        {success && (
-          <div>
-            <p className="text-green-500">{success}</p>
-            <p>
-              Your transactionID:{" "}
-              <span className="font-bold">{transactionId}</span>
-            </p>
-          </div>
-        )}
-      </p>
+
+      {success && (
+        <div>
+          <p className="text-green-500">{success}</p>
+          <p>
+            Your transactionID:{" "}
+            <span className="font-bold">{transactionId}</span>
+          </p>
+        </div>
+      )}
     </>
   );
 };

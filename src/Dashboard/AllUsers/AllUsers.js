@@ -6,11 +6,13 @@ const AllUsers = () => {
   const { data: users = [], refetch } = useQuery({
     queryKey: ["users"],
     queryFn: () => {
-      return fetch("http://localhost:8000/users").then((res) => res.json());
+      return fetch("https://doctors-server-motiurrahman.vercel.app/users").then(
+        (res) => res.json()
+      );
     },
   });
   const handleMakeAdmin = (id) => {
-    fetch(`http://localhost:8000/users/admin/${id}`, {
+    fetch(`https://doctors-server-motiurrahman.vercel.app/users/admin/${id}`, {
       method: "PUT",
       headers: {
         authorization: `bearer ${localStorage.getItem("accessToken")}`,
