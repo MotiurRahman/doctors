@@ -41,9 +41,10 @@ const Login = () => {
     googleLogin()
       .then((result) => {
         const user = result.user;
-        console.log(user);
+        console.log("Email", user.email);
         setMessage("You have loggedin with google");
-        navigate(from, { replace: true });
+        setLoginUserEMail(user.email);
+        //navigate(from, { replace: true });
       })
       .catch((error) => {
         const errorCode = error.code;

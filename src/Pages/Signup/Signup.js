@@ -74,7 +74,7 @@ const Signup = () => {
     googleLogin()
       .then((result) => {
         const user = result.user;
-        console.log(user);
+        console.log("Email", user.email);
         toast("You have loggedin with google");
         navigate(from, { replace: true });
       })
