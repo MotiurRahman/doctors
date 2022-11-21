@@ -1,12 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
-import Dashboard from "../Dashboard/Dashboard/Dashboard";
 import Main from "../Layout/Main";
 import About from "../Pages/About/About";
 import ContactUs from "../Pages/ContactUs/ContactUs";
 import Appointment from "../Pages/Appointment/Appointment/Appointment";
 import Home from "../Pages/Home/Home";
 import Login from "../Pages/Login/Login";
-import Reviews from "../Pages/Reviews/Reviews";
 import Signup from "../Pages/Signup/Signup";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
 import DashboardLayout from "../Layout/DashboardLayout/DashboardLayout";
@@ -15,11 +13,14 @@ import AllUsers from "../Dashboard/AllUsers/AllUsers";
 import AdminRoutes from "./AdminRoutes/AdminRoutes";
 import AddDoctor from "../Dashboard/AddDoctor/AddDoctor";
 import ManageDoctors from "../Dashboard/ManageDoctors/ManageDoctors";
+import Payment from "../Dashboard/Payment/Payment";
+import DisplayError from "../Pages/Shared/DisplayError/DisplayError";
 
 const routes = createBrowserRouter([
   {
     path: "/",
     element: <Main></Main>,
+    errorElement: <DisplayError></DisplayError>,
     children: [
       {
         path: "/",
@@ -60,6 +61,7 @@ const routes = createBrowserRouter([
         <DashboardLayout></DashboardLayout>
       </PrivateRoute>
     ),
+    errorElement: <DisplayError></DisplayError>,
     children: [
       {
         path: "/dashboard",
@@ -86,6 +88,17 @@ const routes = createBrowserRouter([
         element: (
           <AdminRoutes>
             <ManageDoctors></ManageDoctors>
+          </AdminRoutes>
+        ),
+      },
+      {
+        path: "/dashboard/payment/:id",
+        loader: ({ params }) => {
+          return fetch(`http://localhost:8000/bookings/${params.id}`);
+        },
+        element: (
+          <AdminRoutes>
+            <Payment></Payment>
           </AdminRoutes>
         ),
       },

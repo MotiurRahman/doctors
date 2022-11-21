@@ -1,6 +1,7 @@
 import { async } from "@firebase/util";
 import { useQuery } from "@tanstack/react-query";
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import { AuthUserContext } from "../../AuthContext/AuthContext";
 
 const MyAppointment = () => {
@@ -36,6 +37,7 @@ const MyAppointment = () => {
               <th>Treatment</th>
               <th>Date</th>
               <th>Time</th>
+              <th>Payment</th>
             </tr>
           </thead>
           <tbody>
@@ -46,6 +48,17 @@ const MyAppointment = () => {
                 <td>{book.treatment}</td>
                 <td>{book.appointmentDate}</td>
                 <td>{book.slot}</td>
+                <td>
+                  {book.price && !book.paid && (
+                    <Link to={`/dashboard/payment/${book._id}`}>
+                      {" "}
+                      <button className="btn btn-primary">Pay</button>
+                    </Link>
+                  )}
+                  {book.price && book.paid && (
+                    <samp className="text-primary">Paid</samp>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
