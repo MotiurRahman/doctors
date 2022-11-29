@@ -54,7 +54,7 @@ const Signup = () => {
 
   const saveUser = (name, email) => {
     const user = { name, email };
-    fetch("https://doctors-server-motiurrahman.vercel.app/users", {
+    fetch("http://localhost:8000/users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -143,12 +143,12 @@ const Signup = () => {
                 value: 6,
                 message: "Password must be six cahracter long",
               },
-              pattern: {
-                value:
-                  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/,
-                message:
-                  "Minimum six characters, at least one uppercase letter, one lowercase letter, one number and one special character:",
-              },
+              // pattern: {
+              //   value:
+              //     /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/,
+              //   message:
+              //     "Minimum six characters, at least one uppercase letter, one lowercase letter, one number and one special character:",
+              // },
             })}
             type="password"
             name="password"

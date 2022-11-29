@@ -1,8 +1,10 @@
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthUserContext } from "../../AuthContext/AuthContext";
 import useToken from "../../hooks/useToken";
+import SaveUser from "../Signup/SaveUser";
 
 const Login = () => {
   const { login, googleLogin } = useContext(AuthUserContext);
@@ -41,10 +43,11 @@ const Login = () => {
     googleLogin()
       .then((result) => {
         const user = result.user;
-        console.log("Email", user.email);
+
         setMessage("You have loggedin with google");
-        setLoginUserEMail(user.email);
-        //navigate(from, { replace: true });
+        console.log(user);
+        SaveUser(user.displayName, user.email);
+        toast("You have loggedin with google");
       })
       .catch((error) => {
         const errorCode = error.code;

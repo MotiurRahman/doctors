@@ -16,6 +16,8 @@ import ManageDoctors from "../Dashboard/ManageDoctors/ManageDoctors";
 import Payment from "../Dashboard/Payment/Payment";
 import DisplayError from "../Pages/Shared/DisplayError/DisplayError";
 
+//https://doctors-server-motiurrahman.vercel.app
+
 const routes = createBrowserRouter([
   {
     path: "/",
@@ -94,14 +96,12 @@ const routes = createBrowserRouter([
       {
         path: "/dashboard/payment/:id",
         loader: ({ params }) => {
-          return fetch(
-            `https://doctors-server-motiurrahman.vercel.app/bookings/${params.id}`
-          );
+          return fetch(`http://localhost:8000/bookings/${params.id}`);
         },
         element: (
-          <AdminRoutes>
+          <PrivateRoute>
             <Payment></Payment>
-          </AdminRoutes>
+          </PrivateRoute>
         ),
       },
     ],

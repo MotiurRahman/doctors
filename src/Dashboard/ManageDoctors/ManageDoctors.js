@@ -16,14 +16,11 @@ const ManageDoctors = () => {
     queryKey: ["doctors"],
     queryFn: async () => {
       try {
-        const res = await fetch(
-          "https://doctors-server-motiurrahman.vercel.app/doctors",
-          {
-            headers: {
-              authorization: `bearer ${localStorage.getItem("accessToken")}`,
-            },
-          }
-        );
+        const res = await fetch("http://localhost:8000/doctors", {
+          headers: {
+            authorization: `bearer ${localStorage.getItem("accessToken")}`,
+          },
+        });
         const data = await res.json();
         return data;
       } catch (e) {
@@ -42,7 +39,7 @@ const ManageDoctors = () => {
 
   const handleDelete = (data) => {
     console.log(data._id);
-    const URL = `https://doctors-server-motiurrahman.vercel.app/doctors?id=${data._id}`;
+    const URL = `http://localhost:8000/doctors?id=${data._id}`;
 
     fetch(URL, {
       method: "DELETE",

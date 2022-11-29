@@ -38,7 +38,7 @@ const AddDoctor = () => {
           };
           //console.log("Success:", doctor);
 
-          fetch("https://doctors-server-motiurrahman.vercel.app/doctors", {
+          fetch("http://localhost:8000/doctors", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -63,9 +63,9 @@ const AddDoctor = () => {
   const { data: specialties, isLoading } = useQuery({
     queryKey: ["speciality"],
     queryFn: () =>
-      fetch(
-        "https://doctors-server-motiurrahman.vercel.app/appointmentSpeciality"
-      ).then((res) => res.json()),
+      fetch("http://localhost:8000/appointmentSpeciality").then((res) =>
+        res.json()
+      ),
   });
 
   if (isLoading) {
